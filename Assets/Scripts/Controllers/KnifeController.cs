@@ -6,11 +6,10 @@ using UnityEngine;
 
 namespace KnifeHit.Controllers
 {
-    public class KnifeController : IFixedUpdatable
+    public class KnifeController
     {
         private KnifeView _knifeView;
         private Rigidbody2D _knifeRigidbody;
-        private float _cooldown;
         private KnifeStruct _struct;
 
         public KnifeController(KnifeView knifeView, KnifeStruct str)
@@ -19,17 +18,12 @@ namespace KnifeHit.Controllers
             _knifeRigidbody = knifeView.GetComponent<Rigidbody2D>();
             _struct = str;
             knifeView.Collision += OnCollision;
-            Updater.AddUpdatable(this);
         }
 
-        public void FixedUpdate()
+        public void Throw()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && _cooldown < Time.time)
-            {
                 Debug.Log("Выстрел");
                 _knifeRigidbody.AddForce(new Vector2(0, _struct.Speed), ForceMode2D.Impulse);
-                Updater.RemoveUpdatable(this);
-            }
         }
 
         private void OnCollision(GameObject obj)

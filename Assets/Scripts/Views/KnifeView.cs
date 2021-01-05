@@ -8,11 +8,9 @@ using UnityEngine;
 public class KnifeView : MonoBehaviour
 {
     public event Action<GameObject> Collision;
-    [SerializeField] private KnifeData data;
 
     private void Start()
     {
-        new KnifeController(this, data.Knife);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

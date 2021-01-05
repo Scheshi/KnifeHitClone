@@ -8,6 +8,7 @@ namespace KnifeHit
     public class GameInitializator : MonoBehaviour
     {
         [SerializeField] private KnifeData _knifeData;
+        [SerializeField] private KnifeCreatorData _creatorData;
 
         private void Start()
         {
@@ -15,8 +16,8 @@ namespace KnifeHit
 
             var inputManager = new InputManager();
 
-            var knifeCreator = new KnifeCreator(_knifeData);
-            inputManager.Throw += knifeCreator.Creating;
+            var knifeCreator = new KnifeCreator(_creatorData);
+            inputManager.Throw += knifeCreator.Throwing;
 
             Destroy(gameObject);
         }

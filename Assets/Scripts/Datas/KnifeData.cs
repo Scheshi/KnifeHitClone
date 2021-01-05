@@ -8,6 +8,5 @@ namespace KnifeHit.Datas
     public class KnifeData : ScriptableObject
     {
         public KnifeStruct Knife;
-        public GameObject KnifePrefab;
     }
 }
