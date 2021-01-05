@@ -1,4 +1,5 @@
 ﻿using KnifeHit.Controllers;
+using KnifeHit.Datas;
 using System;
 using UnityEngine;
 
@@ -7,10 +8,11 @@ using UnityEngine;
 public class KnifeView : MonoBehaviour
 {
     public event Action<GameObject> Collision;
+    [SerializeField] private KnifeData data;
 
     private void Start()
     {
-        new KnifeController(this);
+        new KnifeController(this, data.Knife);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
