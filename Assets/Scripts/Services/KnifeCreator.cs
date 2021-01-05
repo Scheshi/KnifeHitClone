@@ -2,11 +2,13 @@
 using KnifeHit.Controllers;
 using KnifeHit.Datas;
 using KnifeHit.Interfaces;
-using KnifeHit.Services;
 using UnityEngine;
+
 
 public class KnifeCreator : IFrameUpdatable
 {
+    #region Fields
+
     private GameObject _prefab;
     private KnifeData _knifeData;
     private float _coolDownThrow;
@@ -15,6 +17,10 @@ public class KnifeCreator : IFrameUpdatable
     private bool _isCreating = false;
     private KnifeView _tempView;
 
+    #endregion
+
+
+    #region Contructors
 
     public KnifeCreator(KnifeCreatorData data)
     {
@@ -25,6 +31,10 @@ public class KnifeCreator : IFrameUpdatable
         Updater.AddUpdatable(this);
     }
 
+    #endregion
+
+
+    #region Methods
 
     public void Throwing()
     {
@@ -55,4 +65,6 @@ public class KnifeCreator : IFrameUpdatable
             else _currentCoolDownForCreating -= Time.deltaTime;
         }
     }
+
+    #endregion
 }

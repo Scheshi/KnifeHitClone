@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: TestKnifeCreator
   m_EditorClassIdentifier: 
   KnifeCreator:
-    CoolDownPerThrow: 3
-    KnifePrefab: {fileID: 2002098844160023345, guid: 1f8b23cba82706e4f81ec1a0d8bc3688,
-      type: 3}
+    CoolDownPerThrow: 0.5
+  KnifePrefab: {fileID: 2002098844160023345, guid: 1f8b23cba82706e4f81ec1a0d8bc3688,
+    type: 3}
+  KnifeData: {fileID: 11400000, guid: baf0ddb1e611b5640a060c8c51054321, type: 2}
