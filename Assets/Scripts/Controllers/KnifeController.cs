@@ -29,7 +29,8 @@ namespace KnifeHit.Controllers
 
         private void OnCollision(GameObject obj)
         {
-            if(obj.TryGetComponent(out KnifeView _))
+            Updater.RemoveUpdatable(this);
+            if (obj.TryGetComponent(out KnifeView _))
             {
                 Debug.Log("Проигрыш");
             }
@@ -38,7 +39,6 @@ namespace KnifeHit.Controllers
                 _knifeView.transform.parent = view.transform;
                 _knifeRigidbody.freezeRotation = true;
                 _knifeRigidbody.isKinematic = true;
-                Updater.RemoveUpdatable(this);
             }
         }
     }
