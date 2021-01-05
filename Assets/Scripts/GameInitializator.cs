@@ -10,7 +10,7 @@ namespace KnifeHit
     public class GameInitializator : MonoBehaviour
     {
         [SerializeField] private CoreData _core;
-        private InputManager inputManager = new InputManager();
+        private InputManager _inputManager = new InputManager();
         private int counter = 0;
         private KnifeCreator _knifeController;
 
@@ -27,7 +27,7 @@ namespace KnifeHit
             new LogController(log, _core.Levels[counter].HitCount)
                 .Death += NextLevel;
             _knifeController = new KnifeCreator(_core.Levels[counter].KnifeCreator);
-            inputManager.Throw += _knifeController.Throwing;
+            _inputManager.Throw += _knifeController.Throwing;
         }
 
         public void NextLevel() 
@@ -35,6 +35,7 @@ namespace KnifeHit
             counter++;
             CreatingLevel();
             Debug.Log("Следующий уровень");
+            _inputManager.Throw -= _knifeController.Throwing;
         }
     }
 }
