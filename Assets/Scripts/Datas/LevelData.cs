@@ -8,6 +8,7 @@ namespace KnifeHit.Datas
     public class LevelData : ScriptableObject
     {
         public KnifeCreatorData KnifeCreator;
+        public GameObject LogPrefab;
         public int HitCount;
     }
 }

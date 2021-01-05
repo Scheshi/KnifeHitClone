@@ -1,5 +1,7 @@
-﻿using KnifeHit.Datas;
+﻿using KnifeHit.Controllers;
+using KnifeHit.Datas;
 using KnifeHit.Services;
+using KnifeHit.Views;
 using UnityEngine;
 
 
@@ -7,19 +9,32 @@ namespace KnifeHit
 {
     public class GameInitializator : MonoBehaviour
     {
-        [SerializeField] private KnifeData _knifeData;
-        [SerializeField] private KnifeCreatorData _creatorData;
+        [SerializeField] private CoreData _core;
+        private InputManager inputManager = new InputManager();
+        private int counter = 0;
+        private KnifeCreator _knifeController;
 
         private void Start()
         {
             var updater = new GameObject("Updater").AddComponent<Updater>();
+            CreatingLevel();
+        }
 
-            var inputManager = new InputManager();
+        private void CreatingLevel()
+        {
+            var log = Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 4, Quaternion.identity)
+                .GetComponent<LogView>();
+            new LogController(log, _core.Levels[counter].HitCount)
+                .Death += NextLevel;
+            _knifeController = new KnifeCreator(_core.Levels[counter].KnifeCreator);
+            inputManager.Throw += _knifeController.Throwing;
+        }
 
-            var knifeCreator = new KnifeCreator(_creatorData);
-            inputManager.Throw += knifeCreator.Throwing;
-
-            Destroy(gameObject);
+        public void NextLevel() 
+        {
+            counter++;
+            CreatingLevel();
+            Debug.Log("Следующий уровень");
         }
     }
 }

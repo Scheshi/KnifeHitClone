@@ -8,13 +8,17 @@ namespace KnifeHit.Views
     [RequireComponent(typeof(Rigidbody2D))]
     public class LogView : MonoBehaviour
     {
+        public event Action<GameObject> Collision;
+
         private void Start()
         {
-            if (TryGetComponent(out Rigidbody2D rigidbody))
-            {
-                new LogController(this);
-            }
-            else throw new NullReferenceException("Нет Rigidbody2d на Log");
+            if (!TryGetComponent(out Rigidbody2D rigidbody))
+                 throw new NullReferenceException("Нет Rigidbody2d на Log");
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            Collision?.Invoke(collision.gameObject);   
         }
     }
 }
