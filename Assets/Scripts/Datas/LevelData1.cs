@@ -8,6 +8,7 @@ namespace KnifeHit.Datas
     public class CoreData : ScriptableObject
     {
         public LevelData[] Levels;
-        [Range(0.0f, 1.0f)]public float CoinSpawnChange;
+        [Range(0.0f, 1.0f)]public float CoinSpawnChance;
+        public GameObject CoinPrefab;
     }
 }

@@ -10,6 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: New Core Data
+  m_Name: Core
   m_EditorClassIdentifier: Assembly-CSharp:KnifeHit.Datas:CoreData
-  Levels: []
+  Levels:
+  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
+  - {fileID: 11400000, guid: 441acfbfd7804274eab825b79cecb10d, type: 2}
+  CoinSpawnChange: 0.242

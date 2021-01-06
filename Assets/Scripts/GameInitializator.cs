@@ -26,16 +26,24 @@ namespace KnifeHit
                 .GetComponent<LogView>();
             new LogController(log, _core.Levels[counter].HitCount)
                 .Death += NextLevel;
+            var chance = Random.Range(0.0f, 1.0f);
+            if(chance < _core.CoinSpawnChance)
+            {
+                var logTransform = log.transform;
+                Instantiate(_core.CoinPrefab,
+                    new Vector2(logTransform.position.x + 1.5f, logTransform.position.y),
+                    Quaternion.identity, logTransform);
+            }
             _knifeController = new KnifeCreator(_core.Levels[counter].KnifeCreator);
             _inputManager.Throw += _knifeController.Throwing;
         }
 
         public void NextLevel() 
         {
+            _inputManager.Throw -= _knifeController.Throwing;
             counter++;
             CreatingLevel();
             Debug.Log("Следующий уровень");
-            _inputManager.Throw -= _knifeController.Throwing;
         }
     }
 }
