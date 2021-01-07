@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:KnifeHit.Datas:CoreData
   Levels:
   - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
+  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
+  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
   - {fileID: 11400000, guid: 441acfbfd7804274eab825b79cecb10d, type: 2}
-  CoinSpawnChange: 0.242
+  CoinSpawnChance: 1
+  CoinPrefab: {fileID: 5171809603426814070, guid: 15d2809e50133d641a2053c032af9dba,
+    type: 3}

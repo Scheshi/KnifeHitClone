@@ -28,7 +28,7 @@ namespace KnifeHit
         {
             var log = Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 4, Quaternion.identity)
                 .GetComponent<LogView>();
-            new LogController(log, _core.Levels[counter].HitCount)
+            new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed)
                 .Death += NextLevel;
             var chance = Random.Range(0.0f, 1.0f);
             if(chance < _core.CoinSpawnChance)

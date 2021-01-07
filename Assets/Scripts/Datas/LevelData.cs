@@ -10,5 +10,6 @@ namespace KnifeHit.Datas
         public KnifeCreatorData KnifeCreator;
         public GameObject LogPrefab;
         public int HitCount;
+        public float LogSpeed;
     }
 }

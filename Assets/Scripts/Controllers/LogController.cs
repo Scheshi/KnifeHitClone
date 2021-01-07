@@ -11,16 +11,19 @@ namespace KnifeHit.Controllers
         public Action Death;
         private Transform _logTransform;
         private Rigidbody2D _logRigidbody;
+        private LogView _view;
         private float _speed = 100.0f;
         private int _health;
 
-        public LogController(LogView logView, int health)
+        public LogController(LogView logView, int health, float logSpeed)
         {
+            _view = logView;
             _logTransform = logView.transform;
             _logRigidbody = logView.GetComponent<Rigidbody2D>();
             logView.Collision += OnCollision;
             Updater.AddUpdatable(this);
             _health = health;
+            _speed = logSpeed;
         }
 
         public void Update()
@@ -38,8 +41,8 @@ namespace KnifeHit.Controllers
             {
                 Death?.Invoke();
                 Death = null;
+                _view.Crash();
                 Updater.RemoveUpdatable(this);
-                GameObject.Destroy(_logRigidbody.gameObject);
             }
         }
     }
