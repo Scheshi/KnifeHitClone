@@ -13,10 +13,14 @@ namespace KnifeHit
         private InputManager _inputManager = new InputManager();
         private int counter = 0;
         private KnifeCreator _knifeController;
+        private CoinCounterController _counterController;
 
         private void Start()
         {
-            var updater = new GameObject("Updater").AddComponent<Updater>();
+            new GameObject("Updater")
+                .AddComponent<Updater>();
+
+            _counterController = new CoinCounterController();
             CreatingLevel();
         }
 
@@ -32,7 +36,9 @@ namespace KnifeHit
                 var logTransform = log.transform;
                 Instantiate(_core.CoinPrefab,
                     new Vector2(logTransform.position.x + 1.5f, logTransform.position.y),
-                    Quaternion.identity, logTransform);
+                    Quaternion.identity, logTransform)
+                    .GetComponent<CoinView>()
+                    .Pickup += _counterController.CreamentCount;
             }
             _knifeController = new KnifeCreator(_core.Levels[counter].KnifeCreator);
             _inputManager.Throw += _knifeController.Throwing;
@@ -45,5 +51,6 @@ namespace KnifeHit
             CreatingLevel();
             Debug.Log("Следующий уровень");
         }
+
     }
 }
