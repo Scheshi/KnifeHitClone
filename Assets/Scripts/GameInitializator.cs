@@ -2,8 +2,9 @@
 using KnifeHit.Datas;
 using KnifeHit.Services;
 using KnifeHit.Views;
+using System;
 using UnityEngine;
-
+using Random = UnityEngine.Random;
 
 namespace KnifeHit
 {
@@ -28,24 +29,36 @@ namespace KnifeHit
         {
             var log = Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity)
                 .GetComponent<LogView>();
-            new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed)
-                .Death += NextLevel;
-            
 
             var points = log.GetComponentsInChildren<KnifePointOnLogMarker>();
-            var knifeCount = Random.Range(1, 3);
 
-            for (int i = 0; i < knifeCount; i++)
+            if(points.Length == 0)
             {
-                var point = points[Random.Range(0, points.Length)];
-                var knife = Instantiate(
-                    _core.Levels[counter].KnifeCreator.KnifePrefab,
-                    point.transform.position,
-                    Quaternion.identity,
-                    log.transform
-                    ) ;
-                knife.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 160));
+                throw new NullReferenceException("Нет точек на бревне для спавна кинжалов");
             }
+
+            var knifeCount = Random.Range(1, 4);
+
+                for (int i = 0; i < knifeCount; i++)
+                {
+                if (i > points.Length) break;
+                    var point = points[i];
+                    var knife = Instantiate(
+                        _core.Levels[counter].KnifeCreator.KnifePrefab,
+                        point.transform.position,
+                        Quaternion.identity,
+                        log.transform
+                        );
+                    if(knife.TryGetComponent(out Rigidbody2D rigidbody))
+                    {
+                        rigidbody.freezeRotation = true;
+                        rigidbody.isKinematic = true;
+                    }
+                knife.transform.up = log.transform.position - knife.transform.position;
+            }
+
+            new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed)
+                .Death += NextLevel;
 
             var chance = Random.Range(0.0f, 1.0f);
 
@@ -64,10 +77,19 @@ namespace KnifeHit
 
         public void NextLevel() 
         {
+            Updater.RemoveUpdatable(_knifeController);
             _inputManager.Throw -= _knifeController.Throwing;
             counter++;
-            CreatingLevel();
-            Debug.Log("Следующий уровень");
+            if (counter >= _core.Levels.Length)
+            {
+                throw new IndexOutOfRangeException("Уровни в " + _core.name + " закончились!");
+
+            }
+            else
+            {
+                CreatingLevel();
+                Debug.Log("Следующий уровень");
+            }
         }
 
     }

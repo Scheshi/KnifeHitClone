@@ -13,6 +13,4 @@ MonoBehaviour:
   m_Name: TestKnife
   m_EditorClassIdentifier: 
   Knife:
-    Speed: 20
-  KnifePrefab: {fileID: 2002098844160023345, guid: 1f8b23cba82706e4f81ec1a0d8bc3688,
-    type: 3}
+    Speed: 40
