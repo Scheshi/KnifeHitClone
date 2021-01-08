@@ -1,6 +1,6 @@
-﻿using KnifeHit.Interfaces;
-using KnifeHit.Structs;
+﻿using KnifeHit.Structs;
 using KnifeHit.Views;
+using System;
 using UnityEngine;
 
 
@@ -8,6 +8,7 @@ namespace KnifeHit.Controllers
 {
     public class KnifeController
     {
+        public event Action GameOver;
         private KnifeView _knifeView;
         private Rigidbody2D _knifeRigidbody;
         private KnifeStruct _struct;

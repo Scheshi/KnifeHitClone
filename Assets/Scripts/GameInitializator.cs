@@ -6,15 +6,23 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
 namespace KnifeHit
 {
     public class GameInitializator : MonoBehaviour
     {
+        #region Methods
+
         [SerializeField] private CoreData _core;
         private InputManager _inputManager = new InputManager();
         private int counter = 0;
         private KnifeCreator _knifeController;
         private CoinCounterController _counterController;
+
+        #endregion
+
+
+        #region UnityMethods
 
         private void Start()
         {
@@ -24,6 +32,11 @@ namespace KnifeHit
             _counterController = new CoinCounterController();
             CreatingLevel();
         }
+
+        #endregion
+
+
+        #region Methods
 
         private void CreatingLevel()
         {
@@ -75,6 +88,8 @@ namespace KnifeHit
             _inputManager.Throw += _knifeController.Throwing;
         }
 
+        
+
         public void NextLevel() 
         {
             Updater.RemoveUpdatable(_knifeController);
@@ -92,5 +107,6 @@ namespace KnifeHit
             }
         }
 
+        #endregion
     }
 }
