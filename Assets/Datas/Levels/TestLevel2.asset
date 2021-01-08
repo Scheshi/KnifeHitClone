@@ -16,3 +16,4 @@ MonoBehaviour:
   LogPrefab: {fileID: 5255965491162838261, guid: 4ce329a63f86a8743becc0b3a084173a,
     type: 3}
   HitCount: 10
+  LogSpeed: 40

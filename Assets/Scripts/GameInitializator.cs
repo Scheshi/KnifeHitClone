@@ -26,12 +26,30 @@ namespace KnifeHit
 
         private void CreatingLevel()
         {
-            var log = Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 4, Quaternion.identity)
+            var log = Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity)
                 .GetComponent<LogView>();
             new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed)
                 .Death += NextLevel;
+            
+
+            var points = log.GetComponentsInChildren<KnifePointOnLogMarker>();
+            var knifeCount = Random.Range(1, 3);
+
+            for (int i = 0; i < knifeCount; i++)
+            {
+                var point = points[Random.Range(0, points.Length)];
+                var knife = Instantiate(
+                    _core.Levels[counter].KnifeCreator.KnifePrefab,
+                    point.transform.position,
+                    Quaternion.identity,
+                    log.transform
+                    ) ;
+                knife.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 160));
+            }
+
             var chance = Random.Range(0.0f, 1.0f);
-            if(chance < _core.CoinSpawnChance)
+
+            if (chance <= _core.CoinSpawnChance)
             {
                 var logTransform = log.transform;
                 Instantiate(_core.CoinPrefab,
