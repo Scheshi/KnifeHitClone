@@ -1,4 +1,5 @@
-﻿using KnifeHit.Structs;
+﻿using KnifeHit.Services;
+using KnifeHit.Structs;
 using KnifeHit.Views;
 using System;
 using UnityEngine;
@@ -31,6 +32,8 @@ namespace KnifeHit.Controllers
         {
             if (obj.TryGetComponent(out KnifeView _))
             {
+                Time.timeScale = 0.0f;
+                Repository.Save();
                 Debug.Log("Проигрыш");
             }
             else if(obj.TryGetComponent(out LogView view))

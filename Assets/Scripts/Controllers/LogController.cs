@@ -8,9 +8,9 @@ namespace KnifeHit.Controllers
 {
     public class LogController : IFrameUpdatable
     {
+        public Action Damage;
         public Action Death;
         private Transform _logTransform;
-        private Rigidbody2D _logRigidbody;
         private LogView _view;
         private float _speed = 100.0f;
         private int _health;
@@ -19,7 +19,6 @@ namespace KnifeHit.Controllers
         {
             _view = logView;
             _logTransform = logView.transform;
-            _logRigidbody = logView.GetComponent<Rigidbody2D>();
             logView.Collision += OnCollision;
             Updater.AddUpdatable(this);
             _health = health;
@@ -36,6 +35,7 @@ namespace KnifeHit.Controllers
             if(obj.TryGetComponent(out KnifeView knife))
             {
                 _health--;
+                Damage?.Invoke();
             }
             if (_health <= 0)
             {

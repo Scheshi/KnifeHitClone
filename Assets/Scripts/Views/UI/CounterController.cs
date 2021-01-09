@@ -5,22 +5,27 @@ using UnityEngine.UI;
 
 namespace KnifeHit.Views
 {
-    public class CoinCounterController : Interfaces.ISaving
+    public class CounterController : Interfaces.ISaving
     {
         private readonly Text _textCount;
-        private int _count = 0;
-        private const string _key = "CoinCount";
+        private int _count;
+        private readonly string _key;
+        private string _text;
 
-        public CoinCounterController()
+        public CounterController(Text text, string saveKey)
         {
             Repository.AddSaving(this);
-            _textCount = GameObject.FindObjectOfType<Text>();
+            _textCount = text;
+            _key = saveKey;
+            _count = 0;
+            _text = saveKey + ": ";
+            _textCount.text = _text + _count.ToString();
         }
 
         public void CreamentCount()
         {
             _count++;
-            _textCount.text = _count.ToString();
+            _textCount.text = _text + _count.ToString();
         }
 
         public void Save()
@@ -32,6 +37,7 @@ namespace KnifeHit.Views
         public void Load()
         {
             _count = PlayerPrefs.GetInt(_key, 0);
+            _textCount.text = _text + _count.ToString();
         }
 
     }

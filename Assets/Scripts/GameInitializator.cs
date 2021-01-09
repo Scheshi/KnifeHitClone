@@ -4,6 +4,7 @@ using KnifeHit.Services;
 using KnifeHit.Views;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 
@@ -17,7 +18,8 @@ namespace KnifeHit
         private InputManager _inputManager = new InputManager();
         private int counter = 0;
         private KnifeCreator _knifeController;
-        private CoinCounterController _counterController;
+        private CounterController _coinCounterController;
+        private CounterController _scoreCounter;
 
         #endregion
 
@@ -29,7 +31,12 @@ namespace KnifeHit
             new GameObject("Updater")
                 .AddComponent<Updater>();
 
-            _counterController = new CoinCounterController();
+
+            var texts = FindObjectsOfType<Text>();
+            _coinCounterController = new CounterController(texts[0], "Coin");
+            _coinCounterController.Load();
+            _scoreCounter = new CounterController(texts[1], "Score");
+
             CreatingLevel();
         }
 
@@ -70,8 +77,9 @@ namespace KnifeHit
                 knife.transform.up = log.transform.position - knife.transform.position;
             }
 
-            new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed)
-                .Death += NextLevel;
+            var logController = new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed);
+            logController.Death += NextLevel;
+            logController.Damage += _scoreCounter.CreamentCount;
 
             var chance = Random.Range(0.0f, 1.0f);
 
@@ -79,13 +87,14 @@ namespace KnifeHit
             {
                 var logTransform = log.transform;
                 Instantiate(_core.CoinPrefab,
-                    new Vector2(logTransform.position.x + 1.5f, logTransform.position.y),
+                    new Vector2(logTransform.position.x + 3f, logTransform.position.y),
                     Quaternion.identity, logTransform)
                     .GetComponent<CoinView>()
-                    .Pickup += _counterController.CreamentCount;
+                    .Pickup += _coinCounterController.CreamentCount;
             }
             _knifeController = new KnifeCreator(_core.Levels[counter].KnifeCreator);
             _inputManager.Throw += _knifeController.Throwing;
+            
         }
 
         
@@ -97,6 +106,7 @@ namespace KnifeHit
             counter++;
             if (counter >= _core.Levels.Length)
             {
+                Repository.Save();
                 throw new IndexOutOfRangeException("Уровни в " + _core.name + " закончились!");
 
             }
