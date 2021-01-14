@@ -35,6 +35,8 @@ namespace KnifeHit
             {
                 new MenuController(startButton, quitButton, _coreData);
             }
+
+            Destroy(gameObject);
         }
     }
 }

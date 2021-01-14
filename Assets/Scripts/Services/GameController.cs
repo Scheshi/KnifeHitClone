@@ -2,6 +2,7 @@
 using KnifeHit.Datas;
 using KnifeHit.Views;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -11,7 +12,7 @@ namespace KnifeHit.Services
 {
     public class GameController : MonoBehaviour
     {
-        #region Methods
+        #region Fields
 
         [SerializeField] private CoreData _core;
         private InputManager _inputManager = new InputManager();
@@ -19,6 +20,8 @@ namespace KnifeHit.Services
         private KnifeCreator _knifeController;
         private CounterController _coinCounterController;
         private CounterController _scoreCounter;
+        private List<IDisposable> _disposables = new List<IDisposable>();
+
 
         #endregion
 

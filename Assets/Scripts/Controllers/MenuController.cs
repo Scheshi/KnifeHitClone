@@ -25,6 +25,7 @@ namespace KnifeHit.Controllers
         private void Start()
         {
             Debug.Log("Нажат Start");
+            GameObject.FindObjectOfType<Canvas>().enabled = false;
             new GameController(_core);
         }
 

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using KnifeHit.Interfaces;
-
+using System;
 
 namespace KnifeHit
 {
-    public class Updater : MonoBehaviour
+    public class Updater : MonoBehaviour, IDisposable
     {
 
         #region Fields
@@ -86,6 +86,23 @@ namespace KnifeHit
             {
                 _lateUpdatables.Remove(updatable as ILateUpdate);
             }
+        }
+
+        public void Dispose()
+        {
+            for(int i = 0; i < _fixedUpdatables.Count; i++)
+            {
+                RemoveUpdatable(_fixedUpdatables[i]);
+            }
+            for (int i = 0; i < _framesUpdatables.Count; i++)
+            {
+                RemoveUpdatable(_framesUpdatables[i]);
+            }
+            for(int i = 0; i < _lateUpdatables.Count; i++)
+            {
+                RemoveUpdatable(_lateUpdatables[i]);
+            }
+            Destroy(gameObject);
         }
 
         #endregion
