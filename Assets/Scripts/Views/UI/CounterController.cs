@@ -22,6 +22,7 @@ namespace KnifeHit.Views
             _textCount.text = _text + _count.ToString();
         }
 
+
         public void CreamentCount()
         {
             _count++;
