@@ -31,8 +31,11 @@ namespace KnifeHit.Views
 
         public void Save()
         {
-            PlayerPrefs.SetInt(_key, _count);
-            PlayerPrefs.Save();
+            if (PlayerPrefs.GetInt(_key) < _count)
+            {
+                PlayerPrefs.SetInt(_key, _count);
+                PlayerPrefs.Save();
+            }
         }
 
         public void Load()
@@ -43,8 +46,8 @@ namespace KnifeHit.Views
 
         public void Dispose()
         {
-            GameObject.Destroy(_textCount.gameObject);
             Repository.RemoveSaving(this);
+            GameObject.Destroy(_textCount.gameObject);
         }
     }
 }

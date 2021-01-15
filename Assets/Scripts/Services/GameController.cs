@@ -15,12 +15,18 @@ namespace KnifeHit.Services
         #region Fields
 
         [SerializeField] private CoreData _core;
+        private List<IDisposable> _disposables = new List<IDisposable>();
+        private List<GameObject> _gos = new List<GameObject>();
+
         private InputManager _inputManager = new InputManager();
         private int counter = 0;
         private KnifeCreator _knifeController;
         private CounterController _coinCounterController;
         private CounterController _scoreCounter;
-        private List<IDisposable> _disposables = new List<IDisposable>();
+        private LogController _logController;
+        private LogView _logView;
+        private CoinView _coinView;
+        private Canvas _canvas;
 
         #endregion
 
@@ -35,16 +41,16 @@ namespace KnifeHit.Services
                     .AddComponent<Updater>()
                     );
 
-            var canvas = new GameObject("Canvas").AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.gameObject.AddComponent<GraphicRaycaster>();
-            var scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+            _canvas = new GameObject("Canvas").AddComponent<Canvas>();
+            _canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            _canvas.gameObject.AddComponent<GraphicRaycaster>();
+            var scaler = _canvas.gameObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.matchWidthOrHeight = 0.5f;
-            canvas.transform.localPosition = Vector3.zero;
+            _canvas.transform.localPosition = Vector3.zero;
 
             var coinText = new GameObject("CoinCounter").AddComponent<Text>();
-            coinText.transform.parent = canvas.transform;
+            coinText.transform.parent = _canvas.transform;
             coinText.font = Font.CreateDynamicFontFromOSFont("Arial", 27);
             coinText.rectTransform.localPosition = new Vector2(
                 coinText.rectTransform.rect.width,
@@ -58,7 +64,7 @@ namespace KnifeHit.Services
             _coinCounterController.Load();
 
             var scoreText = new GameObject("ScoreCounter").AddComponent<Text>();
-            scoreText.transform.parent = canvas.transform;
+            scoreText.transform.parent = _canvas.transform;
             scoreText.font = Font.CreateDynamicFontFromOSFont("Arial", 27);
             scoreText.rectTransform.localPosition = new Vector2(
                 -scoreText.rectTransform.rect.width,
@@ -69,6 +75,8 @@ namespace KnifeHit.Services
 
             _disposables.Add(_coinCounterController);
             _disposables.Add(_scoreCounter);
+            _disposables.Add(_logController);
+            _disposables.Add(_knifeController);
 
             CreatingLevel();
         }
@@ -80,6 +88,12 @@ namespace KnifeHit.Services
 
         private void CreatingLevel()
         {
+            if (!Equals(_knifeController, null))
+            {
+                _knifeController.Dispose();
+            }
+
+
             var log = GameObject.Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity)
                 .GetComponent<LogView>();
 
@@ -110,20 +124,20 @@ namespace KnifeHit.Services
                 knife.transform.up = log.transform.position - knife.transform.position;
             }
 
-            var logController = new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed);
-            logController.Death += NextLevel;
-            logController.Damage += _scoreCounter.CreamentCount;
+            _logController = new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed);
+            _logController.Death += NextLevel;
+            _logController.Damage += _scoreCounter.CreamentCount;
 
             var chance = Random.Range(0.0f, 1.0f);
 
             if (chance <= _core.CoinSpawnChance)
             {
                 var logTransform = log.transform;
-                GameObject.Instantiate(_core.CoinPrefab,
+                _coinView = GameObject.Instantiate(_core.CoinPrefab,
                     new Vector2(logTransform.position.x + 3f, logTransform.position.y),
                     Quaternion.identity, logTransform)
-                    .GetComponent<CoinView>()
-                    .Pickup += _coinCounterController.CreamentCount;
+                    .GetComponent<CoinView>();
+                    _coinView.Pickup += _coinCounterController.CreamentCount;
             }
             _knifeController = new KnifeCreator(_core.Levels[counter].KnifeCreator);
             _knifeController.EndGame += EndGame;
@@ -136,7 +150,6 @@ namespace KnifeHit.Services
         public void NextLevel() 
         {
             Updater.RemoveUpdatable(_knifeController);
-            _inputManager.Throw -= _knifeController.Throwing;
             counter++;
             if (counter >= _core.Levels.Length)
             {
@@ -152,21 +165,36 @@ namespace KnifeHit.Services
         
         public void EndGame()
         {
+            _logController.Death -= NextLevel;
+            //_logController.Death();
+            _logController.Damage -= _scoreCounter.CreamentCount;
+            _coinView.Pickup -= _coinCounterController.CreamentCount;
+            _inputManager.Throw -= _knifeController.Throwing;
             //Time.timeScale = 0.0f;
             Repository.Save();
-            foreach (var item in _disposables)
+            for (int i = 0; i<_disposables.Count; i++)
             {
-                item.Dispose();
+                try
+                {
+                    _disposables[i].Dispose();
+                }
+                catch(NullReferenceException)
+                {
+                    throw new NullReferenceException($"Проблемa с {_disposables[i].GetType()}");
+                }
             }
             _disposables.Clear();
-            //var text = new GameObject("Panel").AddComponent<Text>();
-            //text.text = "Конец игры!";
-            //text.transform.parent = 
-            //var button = new GameObject("Button").AddComponent<Button>();
-            //button.onClick.AddListener(delegate ()
-            //{
-            //    new GameObject("GameInitializator").AddComponent<GameInitializator>();
-            //});
+            var button = new GameObject("Button").AddComponent<Button>();
+            button.transform.parent = _canvas.transform;
+            button.transform.localPosition = Vector3.zero;
+            var buttonImage = button.gameObject.AddComponent<Image>();
+            buttonImage.sprite = Resources.Load<Sprite>("Sprite/button");
+            button.targetGraphic = buttonImage;
+            button.onClick.AddListener(delegate ()
+            {
+                GameObject.Destroy(_canvas);
+                GameObject.FindObjectOfType<Canvas>().gameObject.SetActive(true);
+            });
             
         }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace KnifeHit.Controllers
 {
-    public class LogController : IFrameUpdatable
+    public class LogController : IFrameUpdatable, IDisposable
     {
         public Action Damage;
         public Action Death;
@@ -25,6 +25,14 @@ namespace KnifeHit.Controllers
             _speed = logSpeed;
         }
 
+        public void Dispose()
+        {
+            Death?.Invoke();
+            Death = null;
+            _view.Crash();
+            Updater.RemoveUpdatable(this);
+        }
+
         public void Update()
         {
             _logTransform.Rotate(new Vector3(0, 0, _speed * Time.deltaTime));
@@ -32,18 +40,16 @@ namespace KnifeHit.Controllers
 
         private void OnCollision(GameObject obj)
         {
-            if(obj.TryGetComponent(out KnifeView knife))
+            if (_health <= 0)
+            {
+                Dispose();
+            }
+            else if (obj.TryGetComponent(out KnifeView knife))
             {
                 _health--;
                 Damage?.Invoke();
             }
-            if (_health <= 0)
-            {
-                Death?.Invoke();
-                Death = null;
-                _view.Crash();
-                Updater.RemoveUpdatable(this);
-            }
+
         }
     }
 }

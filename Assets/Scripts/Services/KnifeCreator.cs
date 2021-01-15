@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace KnifeHit.Services
 {
-    public class KnifeCreator : IFrameUpdatable
+    public class KnifeCreator : IFrameUpdatable, IDisposable
     {
         #region Fields
 
@@ -19,6 +19,7 @@ namespace KnifeHit.Services
         private float _currentCoolDownForCreating;
         private bool _isCreating = false;
         private KnifeView _tempView;
+        private KnifeController _tempController;
 
         #endregion
 
@@ -46,10 +47,10 @@ namespace KnifeHit.Services
                 if (Time.time > _currentCoolDownThrow)
                 {
                     _currentCoolDownThrow = Time.time + _coolDownThrow;
-                    var knife = new KnifeController(_tempView, _knifeData.Knife);
-                    knife.Throw();
+                    _tempController = new KnifeController(_tempView, _knifeData.Knife);
+                    _tempController.Throw();
                     _isCreating = false;
-                    knife.GameOver += EndGame;
+                    _tempController.GameOver += EndGame;
                 }
             }
         }
@@ -68,6 +69,12 @@ namespace KnifeHit.Services
                 }
                 else _currentCoolDownForCreating -= Time.deltaTime;
             }
+        }
+
+        public void Dispose()
+        {
+            _tempController.GameOver -= EndGame;
+            GameObject.Destroy(_tempView.gameObject);
         }
 
 
