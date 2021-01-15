@@ -1,6 +1,7 @@
 ﻿using KnifeHit.Controllers;
 using KnifeHit.Datas;
 using KnifeHit.Interfaces;
+using KnifeHit.Views;
 using System;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ namespace KnifeHit.Services
         {
             if (_isCreating)
             {
-                if (Time.time > _currentCoolDownThrow)
+                if (Time.time > _currentCoolDownThrow && _tempView != null)
                 {
                     _currentCoolDownThrow = Time.time + _coolDownThrow;
                     _tempController = new KnifeController(_tempView, _knifeData.Knife);
@@ -74,6 +75,7 @@ namespace KnifeHit.Services
         public void Dispose()
         {
             _tempController.GameOver -= EndGame;
+            _tempController = null;
             GameObject.Destroy(_tempView.gameObject);
         }
 

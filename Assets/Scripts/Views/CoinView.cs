@@ -2,18 +2,19 @@
 using UnityEngine;
 
 
-public class CoinView : MonoBehaviour
-{
-    public event Action Pickup;
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
+namespace KnifeHit.Views {
+    public class CoinView : MonoBehaviour
     {
-        if (collision.TryGetComponent<KnifeView>(out var view))
+        public event Action Pickup;
+
+
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            Pickup?.Invoke();
-            Destroy(gameObject);
+            if (collision.TryGetComponent<KnifeView>(out var view))
+            {
+                Pickup?.Invoke();
+                Destroy(gameObject);
+            }
         }
     }
-
 }

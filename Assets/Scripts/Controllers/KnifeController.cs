@@ -37,6 +37,7 @@ namespace KnifeHit.Controllers
             }
             else if(obj.TryGetComponent(out LogView view))
             {
+                _knifeView.Collision -= OnCollision;
                 _knifeView.transform.parent = view.transform;
                 _knifeRigidbody.freezeRotation = true;
                 _knifeRigidbody.isKinematic = true;

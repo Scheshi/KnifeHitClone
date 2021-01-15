@@ -24,9 +24,9 @@ namespace KnifeHit.Services
         private CounterController _coinCounterController;
         private CounterController _scoreCounter;
         private LogController _logController;
-        private LogView _logView;
         private CoinView _coinView;
         private Canvas _canvas;
+        private LogView _logView;
 
         #endregion
 
@@ -93,11 +93,11 @@ namespace KnifeHit.Services
                 _knifeController.Dispose();
             }
 
-
-            var log = GameObject.Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity)
+            _logView = GameObject.Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity)
                 .GetComponent<LogView>();
 
-            var points = log.GetComponentsInChildren<KnifePointOnLogMarker>();
+
+            var points = _logView.GetComponentsInChildren<KnifePointOnLogMarker>();
 
             if(points.Length == 0)
             {
@@ -114,17 +114,17 @@ namespace KnifeHit.Services
                         _core.Levels[counter].KnifeCreator.KnifePrefab,
                         point.transform.position,
                         Quaternion.identity,
-                        log.transform
+                        _logView.transform
                         );
                     if(knife.TryGetComponent(out Rigidbody2D rigidbody))
                     {
                         rigidbody.freezeRotation = true;
                         rigidbody.isKinematic = true;
                     }
-                knife.transform.up = log.transform.position - knife.transform.position;
+                knife.transform.up = _logView.transform.position - knife.transform.position;
             }
 
-            _logController = new LogController(log, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed);
+            _logController = new LogController(_logView, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed);
             _logController.Death += NextLevel;
             _logController.Damage += _scoreCounter.CreamentCount;
 
@@ -132,7 +132,7 @@ namespace KnifeHit.Services
 
             if (chance <= _core.CoinSpawnChance)
             {
-                var logTransform = log.transform;
+                var logTransform = _logView.transform;
                 _coinView = GameObject.Instantiate(_core.CoinPrefab,
                     new Vector2(logTransform.position.x + 3f, logTransform.position.y),
                     Quaternion.identity, logTransform)
@@ -173,17 +173,13 @@ namespace KnifeHit.Services
             //Time.timeScale = 0.0f;
             Repository.Save();
             for (int i = 0; i<_disposables.Count; i++)
-            {
-                try
-                {
+            {   
+                    if(_disposables[i] != null)
                     _disposables[i].Dispose();
-                }
-                catch(NullReferenceException)
-                {
-                    throw new NullReferenceException($"Проблемa с {_disposables[i].GetType()}");
-                }
             }
             _disposables.Clear();
+
+            _logView.Crash();
             var button = new GameObject("Button").AddComponent<Button>();
             button.transform.parent = _canvas.transform;
             button.transform.localPosition = Vector3.zero;
@@ -192,7 +188,7 @@ namespace KnifeHit.Services
             button.targetGraphic = buttonImage;
             button.onClick.AddListener(delegate ()
             {
-                GameObject.Destroy(_canvas);
+                GameObject.Destroy(_canvas.gameObject);
                 GameObject.FindObjectOfType<Canvas>().gameObject.SetActive(true);
             });
             
