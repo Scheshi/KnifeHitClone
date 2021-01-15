@@ -1,6 +1,7 @@
 ﻿using KnifeHit.Controllers;
 using KnifeHit.Datas;
 using KnifeHit.Interfaces;
+using System;
 using UnityEngine;
 
 
@@ -10,6 +11,7 @@ namespace KnifeHit.Services
     {
         #region Fields
 
+        public event Action EndGame;
         private GameObject _prefab;
         private KnifeData _knifeData;
         private float _coolDownThrow;
@@ -47,6 +49,7 @@ namespace KnifeHit.Services
                     var knife = new KnifeController(_tempView, _knifeData.Knife);
                     knife.Throw();
                     _isCreating = false;
+                    knife.GameOver += EndGame;
                 }
             }
         }
@@ -66,6 +69,8 @@ namespace KnifeHit.Services
                 else _currentCoolDownForCreating -= Time.deltaTime;
             }
         }
+
+
 
         #endregion
     }

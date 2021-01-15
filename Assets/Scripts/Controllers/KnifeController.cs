@@ -32,9 +32,8 @@ namespace KnifeHit.Controllers
         {
             if (obj.TryGetComponent(out KnifeView _))
             {
-                Time.timeScale = 0.0f;
-                Repository.Save();
                 Debug.Log("Проигрыш");
+                GameOver?.Invoke();
             }
             else if(obj.TryGetComponent(out LogView view))
             {

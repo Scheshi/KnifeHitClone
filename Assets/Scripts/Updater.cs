@@ -13,11 +13,21 @@ namespace KnifeHit
         private static List<IFixedUpdatable> _fixedUpdatables = new List<IFixedUpdatable>();
         private static List<ILateUpdate> _lateUpdatables = new List<ILateUpdate>();
         private static List<IFrameUpdatable> _framesUpdatables = new List<IFrameUpdatable>();
+        private static List<IGUIUpdatable> _guiUpdatables = new List<IGUIUpdatable>();
 
         #endregion
 
 
         #region UnityMethods
+
+        private void OnGUI()
+        {
+            for(int i = 0; i<_guiUpdatables.Count; i++)
+            {
+                _guiUpdatables[i].OnGui();
+            }
+        }
+
 
         private void Update()
         {
@@ -65,6 +75,10 @@ namespace KnifeHit
             if(updatable is ILateUpdate)
             {
                 _lateUpdatables.Add(updatable as ILateUpdate);
+            }
+            if(updatable is IGUIUpdatable)
+            {
+                _guiUpdatables.Add(updatable as IGUIUpdatable);
             }
         }
 

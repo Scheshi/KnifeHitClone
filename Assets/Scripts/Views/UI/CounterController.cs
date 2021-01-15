@@ -1,11 +1,12 @@
 ﻿using KnifeHit.Services;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 
 namespace KnifeHit.Views
 {
-    public class CounterController : Interfaces.ISaving
+    public class CounterController : Interfaces.ISaving, IDisposable
     {
         private readonly Text _textCount;
         private int _count;
@@ -21,7 +22,6 @@ namespace KnifeHit.Views
             _text = saveKey + ": ";
             _textCount.text = _text + _count.ToString();
         }
-
 
         public void CreamentCount()
         {
@@ -41,5 +41,10 @@ namespace KnifeHit.Views
             _textCount.text = _text + _count.ToString();
         }
 
+        public void Dispose()
+        {
+            GameObject.Destroy(_textCount.gameObject);
+            Repository.RemoveSaving(this);
+        }
     }
 }
