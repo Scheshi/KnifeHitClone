@@ -16,7 +16,6 @@ namespace KnifeHit.Services
 
         [SerializeField] private CoreData _core;
         private List<IDisposable> _disposables = new List<IDisposable>();
-        private List<GameObject> _gos = new List<GameObject>();
         private Canvas _menuCanvas;
 
 
@@ -143,9 +142,11 @@ namespace KnifeHit.Services
                     .GetComponent<CoinView>();
                     _coinView.Pickup += _coinCounterController.CreamentCount;
             }
+            _disposables.Remove(_knifeController);
             _knifeController = new KnifeCreator(_core.Levels[counter].KnifeCreator);
             _knifeController.EndGame += EndGame;
             _inputManager.Throw += _knifeController.Throwing;
+            _disposables.Add(_knifeController);
             
         }
 

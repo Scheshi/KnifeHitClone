@@ -26,8 +26,6 @@ namespace KnifeHit.Views
         public void Crash()
         {
             var count = UnityEngine.Random.Range(5, 10);
-            if (_piecesPrefab != null)
-            {
                 for (int i = 0; i < count; i++)
                 {
                     Instantiate(_piecesPrefab, transform.position, Quaternion.identity)
@@ -38,7 +36,6 @@ namespace KnifeHit.Views
                                               );
 
                 }
-            }
             Destroy(gameObject);
         }
     }
