@@ -17,6 +17,8 @@ namespace KnifeHit.Services
         [SerializeField] private CoreData _core;
         private List<IDisposable> _disposables = new List<IDisposable>();
         private List<GameObject> _gos = new List<GameObject>();
+        private Canvas _menuCanvas;
+
 
         private InputManager _inputManager = new InputManager();
         private int counter = 0;
@@ -33,8 +35,9 @@ namespace KnifeHit.Services
 
         #region Contructors
 
-        public GameController(CoreData coreData)
+        public GameController(CoreData coreData, Canvas menuCanvas)
         {
+            _menuCanvas = menuCanvas;
             _core = coreData;
             _disposables.Add(
                 new GameObject("Updater")
@@ -96,7 +99,6 @@ namespace KnifeHit.Services
             _logView = GameObject.Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity)
                 .GetComponent<LogView>();
 
-
             var points = _logView.GetComponentsInChildren<KnifePointOnLogMarker>();
 
             if(points.Length == 0)
@@ -124,9 +126,11 @@ namespace KnifeHit.Services
                 knife.transform.up = _logView.transform.position - knife.transform.position;
             }
 
+            _disposables.Remove(_logController);
             _logController = new LogController(_logView, _core.Levels[counter].HitCount, _core.Levels[counter].LogSpeed);
             _logController.Death += NextLevel;
             _logController.Damage += _scoreCounter.CreamentCount;
+            _disposables.Add(_logController);
 
             var chance = Random.Range(0.0f, 1.0f);
 
@@ -178,8 +182,6 @@ namespace KnifeHit.Services
                     _disposables[i].Dispose();
             }
             _disposables.Clear();
-
-            _logView.Crash();
             var button = new GameObject("Button").AddComponent<Button>();
             button.transform.parent = _canvas.transform;
             button.transform.localPosition = Vector3.zero;
@@ -189,7 +191,7 @@ namespace KnifeHit.Services
             button.onClick.AddListener(delegate ()
             {
                 GameObject.Destroy(_canvas.gameObject);
-                GameObject.FindObjectOfType<Canvas>().gameObject.SetActive(true);
+                _menuCanvas.enabled = true;
             });
             
         }

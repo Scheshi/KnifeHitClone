@@ -26,15 +26,18 @@ namespace KnifeHit.Views
         public void Crash()
         {
             var count = UnityEngine.Random.Range(5, 10);
-            for(int i = 0; i < count; i++)
+            if (_piecesPrefab != null)
             {
-                Instantiate(_piecesPrefab, transform.position, Quaternion.identity)
-                    .GetComponent<Rigidbody2D>()
-                    .AddForce(new Vector2(UnityEngine.Random.Range(-10, 10),
-                                            UnityEngine.Random.Range(-10, 10)),
-                                            ForceMode2D.Impulse
-                                          );
+                for (int i = 0; i < count; i++)
+                {
+                    Instantiate(_piecesPrefab, transform.position, Quaternion.identity)
+                        .GetComponent<Rigidbody2D>()
+                        .AddForce(new Vector2(UnityEngine.Random.Range(-10, 10),
+                                                UnityEngine.Random.Range(-10, 10)),
+                                                ForceMode2D.Impulse
+                                              );
 
+                }
             }
             Destroy(gameObject);
         }

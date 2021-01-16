@@ -27,14 +27,17 @@ namespace KnifeHit.Controllers
 
         public void Dispose()
         {
-            Death?.Invoke();
-            Death = null;
-            _view.Crash();
             Updater.RemoveUpdatable(this);
+            _view.Crash();
+            _view = null;
+            _logTransform = null;
+            Death = null;
         }
 
         public void Update()
         {
+            //Костыль, защита от полтергейста
+            if (_logTransform == null) Dispose();
             _logTransform.Rotate(new Vector3(0, 0, _speed * Time.deltaTime));
         }
 
@@ -42,6 +45,7 @@ namespace KnifeHit.Controllers
         {
             if (_health <= 0)
             {
+                Death?.Invoke();
                 Dispose();
             }
             else if (obj.TryGetComponent(out KnifeView knife))
