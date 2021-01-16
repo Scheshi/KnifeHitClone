@@ -36,8 +36,6 @@ namespace KnifeHit.Services
 
         public GameController(CoreData coreData, Canvas menuCanvas)
         {
-            try
-            {
                 _menuCanvas = menuCanvas;
             _core = coreData;
             _disposables.Add(
@@ -54,13 +52,14 @@ namespace KnifeHit.Services
             _canvas.transform.localPosition = Vector3.zero;
 
             var coinText = new GameObject("CoinCounter").AddComponent<Text>();
-            coinText.transform.parent = _canvas.transform;
-            coinText.font = Font.CreateDynamicFontFromOSFont("Arial", 27);
-            coinText.rectTransform.localPosition = new Vector2(
-                coinText.rectTransform.rect.width,
-                -coinText.rectTransform.rect.height);
-            coinText.rectTransform.anchorMin = new Vector2(0.0f, 1.0f);
-            coinText.rectTransform.anchorMax = new Vector2(0.0f, 1.0f);
+            coinText.Adjust(200, 100, _canvas.transform, new Vector2(
+                -Screen.width / 2 + coinText.rectTransform.rect.width,
+                Screen.height / 2 - coinText.rectTransform.rect.height / 2),
+                new Vector2(0.0f, 1.0f),
+                new Vector2(0.0f, 1.0f));
+
+
+
             _coinCounterController = new CounterController(
                 coinText,
                 "Coin"
@@ -68,13 +67,12 @@ namespace KnifeHit.Services
             _coinCounterController.Load();
 
             var scoreText = new GameObject("ScoreCounter").AddComponent<Text>();
-            scoreText.transform.parent = _canvas.transform;
-            scoreText.font = Font.CreateDynamicFontFromOSFont("Arial", 27);
-            scoreText.rectTransform.localPosition = new Vector2(
-                -scoreText.rectTransform.rect.width,
-                -scoreText.rectTransform.rect.height);
-            scoreText.rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
-            scoreText.rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
+            scoreText.Adjust(200, 100, _canvas.transform, new Vector2(
+                 Screen.width / 2,
+                 Screen.height / 2 - scoreText.rectTransform.rect.height / 2),
+                new Vector2(1.0f, 1.0f),
+                new Vector2(1.0f, 1.0f));
+
             _scoreCounter = new CounterController(scoreText, "Score");
 
             _disposables.Add(_coinCounterController);
@@ -82,22 +80,7 @@ namespace KnifeHit.Services
             _disposables.Add(_logController);
             _disposables.Add(_knifeController);
 
-
-                CreatingLevel();
-            }
-            catch(Exception e)
-            {
-                var errorText = new GameObject("Error").AddComponent<Text>();
-                errorText.font = Font.CreateDynamicFontFromOSFont("Arial", 27);
-                errorText.rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
-                errorText.rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
-                errorText.transform.parent = _menuCanvas.transform;
-                errorText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width);
-                errorText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Screen.height);
-                errorText.text = e.ToString();
-                errorText.transform.localPosition = new Vector2(0.0f, -Screen.height / 4);
-                _menuCanvas.enabled = true;
-            }
+             CreatingLevel();
         }
 
         #endregion
@@ -175,7 +158,7 @@ namespace KnifeHit.Services
             counter++;
             if (counter >= _core.Levels.Length)
             {
-                EndGame();
+                EndGame(true);
                 throw new IndexOutOfRangeException("Уровни в " + _core.name + " закончились!");
             }
             else
@@ -185,11 +168,10 @@ namespace KnifeHit.Services
             }
         }
         
-        public void EndGame()
+        public void EndGame(bool isWin)
         {
             Handheld.Vibrate();
             _logController.Death -= NextLevel;
-            //_logController.Death();
             _logController.Damage -= _scoreCounter.CreamentCount;
             if(_coinView != null)
             _coinView.Pickup -= _coinCounterController.CreamentCount;
@@ -213,6 +195,15 @@ namespace KnifeHit.Services
                 GameObject.Destroy(_canvas.gameObject);
                 _menuCanvas.enabled = true;
             });
+
+            var text = new GameObject("Text").AddComponent<Text>();
+            text.Adjust(100, 200, _canvas.transform, new Vector2(
+                button.transform.localPosition.x,
+                button.transform.localPosition.y + text.rectTransform.rect.height
+                ));
+            if (isWin)
+                text.text = "Вы выйграли!";
+            else text.text = "Вы проиграли!";
             
         }
 

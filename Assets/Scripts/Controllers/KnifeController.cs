@@ -9,7 +9,7 @@ namespace KnifeHit.Controllers
 {
     public class KnifeController
     {
-        public event Action GameOver;
+        public event Action<bool> GameOver;
         private KnifeView _knifeView;
         private Rigidbody2D _knifeRigidbody;
         private KnifeStruct _struct;
@@ -34,7 +34,7 @@ namespace KnifeHit.Controllers
             if (obj.TryGetComponent(out KnifeView _))
             {
                 Debug.Log("Проигрыш");
-                GameOver?.Invoke();
+                GameOver?.Invoke(false);
             }
             else if(obj.TryGetComponent(out LogView view))
             {

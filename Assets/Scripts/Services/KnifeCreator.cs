@@ -12,7 +12,7 @@ namespace KnifeHit.Services
     {
         #region Fields
 
-        public event Action EndGame;
+        public event Action<bool> EndGame;
         private GameObject _prefab;
         private KnifeData _knifeData;
         private float _coolDownThrow;
