@@ -8,7 +8,7 @@ namespace KnifeHit.Services
     public class InputManager : IFrameUpdatable
     {
         public event Action Throw;
-#if UNITY_EDITOR
+#if !UNITY_ANDROID && !UNITY_IOS
         private string _throwKnife = "Jump";
 #endif
 
@@ -19,7 +19,7 @@ namespace KnifeHit.Services
 
         public void Update()
         {
- #if UNITY_ANDROID || UNITY_IES
+ #if UNITY_ANDROID || UNITY_IOS
             if (Input.touchCount > 0)
             {
                 Throw?.Invoke();

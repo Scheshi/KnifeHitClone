@@ -36,7 +36,9 @@ namespace KnifeHit.Services
 
         public GameController(CoreData coreData, Canvas menuCanvas)
         {
-            _menuCanvas = menuCanvas;
+            try
+            {
+                _menuCanvas = menuCanvas;
             _core = coreData;
             _disposables.Add(
                 new GameObject("Updater")
@@ -80,7 +82,22 @@ namespace KnifeHit.Services
             _disposables.Add(_logController);
             _disposables.Add(_knifeController);
 
-            CreatingLevel();
+
+                CreatingLevel();
+            }
+            catch(Exception e)
+            {
+                var errorText = new GameObject("Error").AddComponent<Text>();
+                errorText.font = Font.CreateDynamicFontFromOSFont("Arial", 27);
+                errorText.rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
+                errorText.rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
+                errorText.transform.parent = _menuCanvas.transform;
+                errorText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width);
+                errorText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Screen.height);
+                errorText.text = e.ToString();
+                errorText.transform.localPosition = new Vector2(0.0f, -Screen.height / 4);
+                _menuCanvas.enabled = true;
+            }
         }
 
         #endregion
@@ -95,8 +112,8 @@ namespace KnifeHit.Services
                 _knifeController.Dispose();
             }
 
-            _logView = GameObject.Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity)
-                .GetComponent<LogView>();
+            var log = GameObject.Instantiate(_core.Levels[counter].LogPrefab, Vector2.up * 8, Quaternion.identity);
+            _logView = log.GetComponent<LogView>();
 
             var points = _logView.GetComponentsInChildren<KnifePointOnLogMarker>();
 
