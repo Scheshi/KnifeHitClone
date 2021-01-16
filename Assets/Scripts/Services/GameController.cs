@@ -190,6 +190,7 @@ namespace KnifeHit.Services
             _logController.Death -= NextLevel;
             //_logController.Death();
             _logController.Damage -= _scoreCounter.CreamentCount;
+            if(_coinView != null)
             _coinView.Pickup -= _coinCounterController.CreamentCount;
             _inputManager.Throw -= _knifeController.Throwing;
             //Time.timeScale = 0.0f;
