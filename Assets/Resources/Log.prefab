@@ -203,6 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _piecesPrefab: {fileID: 8507534437626557708, guid: 19a20af705cac3b4ea9c2ade07b549a9,
     type: 3}
+  _hitSound: {fileID: 8300000, guid: 9e87354d394d90a4ead87778771e8718, type: 3}
 --- !u!50 &5255965491162838264
 Rigidbody2D:
   serializedVersion: 4

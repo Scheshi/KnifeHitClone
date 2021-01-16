@@ -187,6 +187,7 @@ namespace KnifeHit.Services
         
         public void EndGame()
         {
+            Handheld.Vibrate();
             _logController.Death -= NextLevel;
             //_logController.Death();
             _logController.Damage -= _scoreCounter.CreamentCount;

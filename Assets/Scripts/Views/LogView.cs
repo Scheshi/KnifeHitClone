@@ -9,6 +9,7 @@ namespace KnifeHit.Views
     public class LogView : MonoBehaviour
     {
         [SerializeField] private GameObject _piecesPrefab;
+        [SerializeField] private AudioClip _hitSound;
 
         public event Action<GameObject> Collision;
 
@@ -20,6 +21,7 @@ namespace KnifeHit.Views
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            AudioSource.PlayClipAtPoint(_hitSound, transform.position);
             Collision?.Invoke(collision.gameObject);   
         }
 

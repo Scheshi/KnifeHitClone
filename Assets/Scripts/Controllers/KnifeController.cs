@@ -30,6 +30,7 @@ namespace KnifeHit.Controllers
 
         private void OnCollision(GameObject obj)
         {
+            Handheld.Vibrate();
             if (obj.TryGetComponent(out KnifeView _))
             {
                 Debug.Log("Проигрыш");
