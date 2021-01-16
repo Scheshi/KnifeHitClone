@@ -57,7 +57,7 @@ namespace KnifeHit.Services
                 Screen.height / 2 - coinText.rectTransform.rect.height / 2),
                 new Vector2(0.0f, 1.0f),
                 new Vector2(0.0f, 1.0f));
-
+            coinText.alignment = TextAnchor.UpperLeft;
 
 
             _coinCounterController = new CounterController(
@@ -68,11 +68,11 @@ namespace KnifeHit.Services
 
             var scoreText = new GameObject("ScoreCounter").AddComponent<Text>();
             scoreText.Adjust(200, 100, _canvas.transform, new Vector2(
-                 Screen.width / 2,
+                 Screen.width / 2 - scoreText.rectTransform.rect.width,
                  Screen.height / 2 - scoreText.rectTransform.rect.height / 2),
                 new Vector2(1.0f, 1.0f),
                 new Vector2(1.0f, 1.0f));
-
+            scoreText.alignment = TextAnchor.UpperRight;
             _scoreCounter = new CounterController(scoreText, "Score");
 
             _disposables.Add(_coinCounterController);

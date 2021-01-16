@@ -46,10 +46,12 @@ namespace KnifeHit
 
             coinText.Adjust(200, 100, canvas.transform, new Vector2(startButton.transform.localPosition.x, coinText.rectTransform.rect.height));
             coinText.text = $"Кол-во монет = {PlayerPrefs.GetInt("Coin")}";
+            coinText.alignment = TextAnchor.MiddleCenter;
+
 
             scoreText.Adjust(200, 100, canvas.transform, new Vector2(startButton.transform.localPosition.x, coinText.rectTransform.localPosition.y + scoreText.rectTransform.rect.height));
             scoreText.text = $"Ваш рекорд = {PlayerPrefs.GetInt("Score")}";
-
+            scoreText.alignment = TextAnchor.MiddleCenter;
 
 
 
