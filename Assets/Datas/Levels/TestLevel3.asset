@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98e4d74f8320a3340913ba949b9b4952, type: 3}
+  m_Name: TestLevel3
+  m_EditorClassIdentifier: 
+  KnifeCreator: {fileID: 11400000, guid: 9b0a921538b7ed84199db76a4c665c93, type: 2}
+  LogPrefab: {fileID: 5255965491162838261, guid: 4ce329a63f86a8743becc0b3a084173a,
+    type: 3}
+  HitCount: 15
+  LogSpeed: 60

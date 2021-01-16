@@ -17,12 +17,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
   - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
   - {fileID: 11400000, guid: 441acfbfd7804274eab825b79cecb10d, type: 2}
-  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
-  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
-  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
   - {fileID: 11400000, guid: 441acfbfd7804274eab825b79cecb10d, type: 2}
-  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
-  - {fileID: 11400000, guid: c0623f5e78dc31147a21cf8b893f6e19, type: 2}
+  - {fileID: 11400000, guid: 1da00ae061b7d514b9d95fcf34493702, type: 2}
+  - {fileID: 11400000, guid: 1da00ae061b7d514b9d95fcf34493702, type: 2}
+  - {fileID: 11400000, guid: 1da00ae061b7d514b9d95fcf34493702, type: 2}
+  - {fileID: 11400000, guid: 9c51e4eb21220924082442e95ee844e5, type: 2}
+  - {fileID: 11400000, guid: 9c51e4eb21220924082442e95ee844e5, type: 2}
   CoinSpawnChance: 0.25
   CoinPrefab: {fileID: 5171809603426814070, guid: 15d2809e50133d641a2053c032af9dba,
     type: 3}
